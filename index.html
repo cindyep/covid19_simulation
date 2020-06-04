@@ -2,18 +2,27 @@
 <html>
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Covid-19 Pandemic Simulation</title>
         <link rel="stylesheet" href="css/normalize.css" /> 
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="css/estilo.css" />
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
     </head>
     <body>
+        <!-- Header -->
         <div class="header">
             <div class="linha">
                 <header>
+                    <!-- Logo -->
                     <div class="coluna col12">
                         <h1 class="logo">Covid-19 Pandemic Simulation</h1>
                     </div>
+                    <!-- Menu -->
                     <div class="coluna col12">
                         <ul class="menu inline sem-marcador">
                             <li><a href="index.html">Simulation</a></li>
@@ -26,8 +35,12 @@
                 </header>
             </div>
         </div>
+        <!-- End of header -->
+
+        <!-- Section -->
         <div class="linha">
             <section>
+                <!-- Sidebar -->
                 <div class="coluna col4 sidebar">
                     <ul class="sem-marcador sem-padding">
                         <li><img src="img/wash.png" alt=""></li>
@@ -36,12 +49,86 @@
                         <li><img src="img/protect2.png" alt=""></li>
                     </ul>
                 </div>
-                <div class="coluna col8">
-                    <!--Simulation-->
-                    <p class="text-title">Simulate</p>
+                <!-- End of sidebar -->
+
+                <!-- Graph section -->
+                <div class="coluna col8 pt-5">
+                        <div class="card">
+                            <div class="card body">
+                                <h1>Graph <button class = "btn btn-success" onclick = "updateChart()">y++</button> </h1>
+                            </div>
+                            <div class="card body">
+                                <canvas id="covidChart" width="70" height="50"></canvas>
+                            </div>
+                        </div>
+                        <script>
+                            var covidCanvas = document.getElementById('covidChart').getContext('2d');
+                            var contaminatedPeople = [0, 1, 2];
+
+                            // Y axis: how many people are contaminated
+                            var contaminationData = {
+                                label: "Contaminated Population",
+                                data: contaminatedPeople,
+                                lineTension: 0,
+                                fill: false,
+                                borderColor: 'red'
+                            }
+
+                            // X axis: month/year
+                            var covidData = {
+                                labels: ["November/2019", "December/2019", "January/2020"],
+                                datasets: [contaminationData]
+                            };
+
+                            // Chart options
+                            var chartOptions = {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            max: 3,
+                                            min: 0,
+                                            stepSize: 1
+                                        }
+                                    }]
+                                },
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: {
+                                        boxWidth: 80,
+                                        fontColor: 'black'
+                                    }
+                                }
+                            };
+
+                            // Actual creation of the chart
+                            var lineChart = new Chart(covidCanvas, {
+                                type: 'line',
+                                data: covidData,
+                                options: chartOptions
+                            });
+
+                            // Function to add 1 to array of contaminated people (Y axis)
+                            function updateChart() {
+                                for(var i = 0; i < 3; i++){
+                                    if(lineChart.data.datasets[0].data[i]>=3){
+                                        lineChart.data.datasets[0].data = [0,1,2];
+                                    }
+                                    else{
+                                        lineChart.data.datasets[0].data[i] += 1;
+                                    }
+                                }
+
+                                lineChart.update(); 
+                            }
+                        </script>
                 </div>
+                <!-- End of graph section -->
             </section>
         </div>
+        <!-- End of section -->
+        
+        <!-- Footer -->
         <div class="footer">
             <div class="linha">
                 <footer>
@@ -52,5 +139,11 @@
                 </footer>
             </div>
         </div>
+        <!-- End of footer -->
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
     </body>
 </html>
